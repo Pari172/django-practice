@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+
+{% comment "Very Imporant" %}
+
+always write extend at top of document✨
+
+{% endcomment %}
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,14 +21,21 @@
         <h1>Challenge Not Available</h1>
     {% endif %}
 </body>
-</html>
+</html> {% endcomment %}
 
-{% comment %} {% extends "base.html" %}
+
+{% comment %} {% extends "base.html" %} {% endcomment %}
 
 {% block title %}
-    Challenge page
+{{ month }} Challenge page
 {% endblock title %}
 
 {% block content %}
-
-{% endblock content %} {% endcomment %}
+    <h1>this is challenge.html page for month number😂 - {{ month_number|add:"1" }}</h1>
+    {#<h1>{{ text }}</h1>#}
+    {% if text is not None %}
+        <h1>{{ text }}</h1>
+    {% else %}
+        <h1>Challenge Not Available</h1>
+    {% endif %}
+{% endblock content %}
