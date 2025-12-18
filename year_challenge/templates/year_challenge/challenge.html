@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ month }} challenge</title>
+</head>
+<body>
+    <h1>this is challenge.html page for month number - {{ month_number|add:"1" }}</h1>
+    {#<h1>{{ text }}</h1>#}
+    {% if text is not None %}
+        <h1>{{ text }}</h1>
+    {% else %}
+        <h1>Challenge Not Available</h1>
+    {% endif %}
+</body>
+</html>
+
+{% comment %} {% extends "base.html" %}
+
+{% block title %}
+    Challenge page
+{% endblock title %}
+
+{% block content %}
+
+{% endblock content %} {% endcomment %}
