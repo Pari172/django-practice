@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% comment "Very Imporant" %}
 
 always write extend at top of document✨
@@ -30,12 +30,20 @@ always write extend at top of document✨
 {{ month }} Challenge page
 {% endblock title %}
 
+{% block css_files %}
+    <link rel="stylesheet" href="{% static "year_challenge/challenge1.css" %}">
+    <link rel="stylesheet" href="{% static "year_challenge/includes/header.css" %}">
+{% endblock css_files %}
+
+
 {% block content %}
+    {% comment %} {% include "year_challenge/includes/header.html" %} {% endcomment %}
+    {% include "year_challenge/includes/header.html" with active_page="challenge"  %}
     <h1>this is challenge.html page for month number😂 - {{ month_number|add:"1" }}</h1>
     {#<h1>{{ text }}</h1>#}
     {% if text is not None %}
         <h1>{{ text }}</h1>
     {% else %}
-        <h1>Challenge Not Available</h1>
+        <h1 class="fallback" >Challenge Not Available</h1>
     {% endif %}
 {% endblock content %}

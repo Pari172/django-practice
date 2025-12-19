@@ -1,0 +1,15 @@
+<header>
+    <nav>
+        <a href="{% url 'year_challenge:index' %}">All Challenges</a>
+    </nav>
+    {{ month }} 
+    {{ active_page }}
+</header>
+
+{% comment "Variable access" %}
+
+When we add this header.html using include tag in any other
+template files, then all the varible accisible in that template files are also
+accesible in this header.html
+
+{% endcomment %}
