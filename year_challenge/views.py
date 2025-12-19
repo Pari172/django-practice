@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,HttpResponseNotFound
 from django.urls import reverse
-# from django.template.loader import render_to_string    # this work is already done by render
+from django.template.loader import render_to_string    # this work is already done by render
 month_and_chanllenge = {
     'january':'january challenge is here',
     'february':'february challenge is here',
@@ -41,7 +41,9 @@ def monthly_challenge(request,month):
             "month_number":months.index(month)
         })
     except Exception:
-        return HttpResponse("Invalid month by string!")
+        #return HttpResponse("Invalid month by string!")
+        res_data = render_to_string('error.html')
+        return HttpResponseNotFound(res_data)
 
     
 def monthly_challenge_by_number(request,month):

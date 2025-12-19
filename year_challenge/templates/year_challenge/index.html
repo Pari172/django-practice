@@ -1,8 +1,15 @@
 {% extends "base.html" %}
+{% load static %}       
+
 
 {% block title %}
     Year Challenge
 {% endblock title %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static "year_challenge/challenge.css" %}">
+    <link rel="stylesheet" href="{% static "year_challenge/includes/header.css" %}">
+{% endblock css_files %}
 
 {% block content %}
     {% comment %} {% include "year_challenge/includes/header.html" %} {% endcomment %}

@@ -117,4 +117,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+
+# bellow line is for django to look static folders inside the apps
 STATIC_URL = 'static/'
+
+#bellow line is for django to look static folder at global level
+STATICFILES_DIRS = [BASE_DIR/'static']
