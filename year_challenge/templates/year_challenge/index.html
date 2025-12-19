@@ -5,6 +5,8 @@
 {% endblock title %}
 
 {% block content %}
+    {% comment %} {% include "year_challenge/includes/header.html" %} {% endcomment %}
+    {% include "year_challenge/includes/header.html" with active_page="index"  %}
     <ul>
         {% for month in months %}
             <li><a href="{% url 'year_challenge:monthly_challenge' month %}">{{ month|title }}</a></li>
