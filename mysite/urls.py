@@ -22,5 +22,6 @@ app_name = "mysite"
 urlpatterns = [
     path('', views.home),
     path('admin/', admin.site.urls),
-    path('month/',include('year_challenge.urls'))
+    path('month/',include('year_challenge.urls')),
+    path('blog_post/',include('blog_app.urls'))
 ]

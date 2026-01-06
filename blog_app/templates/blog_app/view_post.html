@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}
+    View Post
+{% endblock title %}
+
+{% block content %}
+    <h1>Post: {{ post }}</h1>
+    <h4>Body: {{ body }}</h4>
+    <a href="{% url 'blog_app:all_posts' %}">go to all post</a>
+{% endblock content %}
