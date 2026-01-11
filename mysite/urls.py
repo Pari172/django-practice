@@ -23,5 +23,6 @@ urlpatterns = [
     path('', views.home),
     path('admin/', admin.site.urls),
     path('month/',include('year_challenge.urls')),
-    path('blog_post/',include('blog_app.urls'))
+    path('blog_post/',include('blog_app.urls')),
+    path('book_outlet/',include('book_outlet.urls')),
 ]

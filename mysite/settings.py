@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'year_challenge',
     'blog_app',
+    'book_outlet',
 ]
 
 MIDDLEWARE = [
