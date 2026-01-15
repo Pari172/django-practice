@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'year_challenge',
     'blog_app',
     'book_outlet',
+    'reviews',
 ]
 
 MIDDLEWARE = [
