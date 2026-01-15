@@ -125,3 +125,7 @@ STATIC_URL = 'static/'
 
 #bellow line is for django to look static folder at global level
 STATICFILES_DIRS = [BASE_DIR/'static']
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR/'media'
