@@ -1,11 +1,25 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviews</title>
+    <link rel="stylesheet" href="{% static "reviews/styles.css" %}">
 </head>
 <body>
     <h1>Welcome to reviews</h1>
+    {% comment %} {% if has_error %}
+        <h1>Error occured - please enter valid username</h1>
+    {% endif %} {% endcomment %}
+    <form method="POST">
+        {% csrf_token %}
+        {% comment %} {{ form.user_name.label_tag }}
+        {{ form.user_name }}
+        {{ form.user_name.errors }} {% endcomment %}
+         {{ form }}
+         {% comment %} you can also use for loop to diplay all the fields of form {% endcomment %}
+        <button type='submit'>Send</button>
+    </form>
 </body>
 </html>
