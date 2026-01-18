@@ -1,5 +1,24 @@
-{% load static %}
-<!DOCTYPE html>
+{% extends "reviews/base.html" %}
+
+{% block title %}Your Reviews{% endblock title %}
+
+{% block content %}
+<form method="POST">
+        {% csrf_token %}
+        {% comment %} {{ form.user_name.label_tag }}
+        {{ form.user_name }}
+        {{ form.user_name.errors }} {% endcomment %}
+         {{ form }}
+         {% comment %} you can also use for loop to diplay all the fields of form {% endcomment %}
+        <button type='submit'>Send</button>
+</form>
+{% endblock content %}
+
+
+{% comment %} Django only consider first comment tag and last comment tag
+if you used nested comment tags it will give parsing error {% endcomment %}
+
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,17 +28,18 @@
 </head>
 <body>
     <h1>Welcome to reviews</h1>
-    {% comment %} {% if has_error %}
+    <!--
+    {% if has_error %}
         <h1>Error occured - please enter valid username</h1>
-    {% endif %} {% endcomment %}
+    {% endif %} -->
     <form method="POST">
         {% csrf_token %}
-        {% comment %} {{ form.user_name.label_tag }}
+        <!--{{ form.user_name.label_tag }}
         {{ form.user_name }}
-        {{ form.user_name.errors }} {% endcomment %}
+        {{ form.user_name.errors }}-->
          {{ form }}
-         {% comment %} you can also use for loop to diplay all the fields of form {% endcomment %}
+         <!--you can also use for loop to diplay all the fields of form-->
         <button type='submit'>Send</button>
     </form>
 </body>
-</html>
+</html> {% endcomment %}

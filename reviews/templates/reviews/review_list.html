@@ -1,0 +1,32 @@
+{% extends "reviews/base.html" %}
+{% block title %}
+    Review List
+{% endblock title %}
+
+{% block content %}
+    <ul>
+        {% comment %} {% for review in reviews %}
+            <h4>Raview No: {{ forloop.counter }}</h4>
+            <li>{{ review.user_name }}</li>
+            <li>{{ review.review_text }}</li>
+            <li>{{ review.rating }}</li>
+        {% endfor %} {% endcomment %}
+
+        {% comment %} If we use ListView then we cannot use 'reviews' in for loop, 
+        we should use object_list.
+        if you want to use 'reviews' then set context_object_name='reviews' in views.py
+        {% endcomment %}
+        {% comment %} {% for review in object_list %}
+            <h4>Raview No: {{ forloop.counter }}</h4>
+            <li>{{ review.user_name }}</li>
+            <li>{{ review.review_text }}</li>
+            <li>{{ review.rating }}</li>
+        {% endfor %} {% endcomment %}
+        {% for review in reviews %}
+            <h4>Raview No: {{ forloop.counter }}</h4>
+            <li>{{ review.user_name }}</li>
+            <li>{{ review.review_text }}</li>
+            <li>{{ review.rating }}</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

@@ -3,6 +3,10 @@ from django.http import HttpResponseRedirect
 from .forms import ReviewForm
 from .models import Review
 from django.views import View
+from django.views.generic.base import TemplateView
+from django.views.generic import ListView
+from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
 # Create your views here.
 
 # This I created before learning about ModelForm
@@ -50,23 +54,76 @@ def review1(request):
         'form': form
     })
     
-
+ 
 # This is a class based view, it automatically handle get and post methods, we just need to create get and post funtions and django do it all
-class ReviewView(View):
-    def get(self,request):
-        form = ReviewForm()
-        return render(request, "reviews/index.html", {
-            "form" : form
-        })
+# class ReviewView(View):
+#     def get(self,request):
+#         form = ReviewForm()
+#         return render(request, "reviews/index.html", {
+#             "form" : form
+#         })
 
-    def post(self,request):
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/reviews/thank-you')
+#     def post(self,request):
+#         form = ReviewForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect('/reviews/thank-you')
 
-def thank_you(request):
-    # entered_username = request.POST['username'] this line will cause error because after doing redirect its a GET req not POST req
-    return render(request, "reviews/thank_you.html",{
-        # 'username': entered_username
-    })
+# above ReviewView can be rplaced with bellow class view using FormView
+class ReviewView(FormView):
+    form_class = ReviewForm
+    template_name = "reviews/index.html"
+    success_url = "thank-you"
+    
+    def form_invalid(self, form):
+        form.save()
+        return super().form_invalid(form)
+    
+    
+
+# def thank_you(request):
+#     # entered_username = request.POST['username'] this line will cause error because after doing redirect its a GET req not POST req
+#     return render(request, "reviews/thank_you.html",{
+#         # 'username': entered_username
+#     })
+
+
+# commenting this out because bellow is TemplateView which is used to directly rendering the templates
+# class ThankYou(View):
+#     def get(self, request):
+#         return render(request,'reviews/thank_you.html')
+
+
+class ThankYouView(TemplateView):
+    template_name = "reviews/thank_you.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["message"] = "This Works!"
+        return context
+
+# commenting this out after knowing about ListView  
+# class ReviewsListView(TemplateView):
+#     template_name = "reviews/review_list.html"
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         reviews = Review.objects.all()
+#         context["reviews"] = reviews
+#         return context
+
+class ReviewListView(ListView):
+    template_name = "reviews/review_list.html"
+    model = Review
+    context_object_name = "reviews" # by defualt it is 'object_list'
+    def get_ordering(self):
+        return ['id']
+
+class SingleReviewView(TemplateView):
+    template_name = "reviews/single_review.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        review_id = kwargs["id"]
+        review = Review.objects.get(pk=review_id)
+        context["review"] = review
+        return context
+    
