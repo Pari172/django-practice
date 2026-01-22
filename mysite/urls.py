@@ -28,6 +28,7 @@ urlpatterns = [
     path('blog_post/',include('blog_app.urls')),
     path('book_outlet/',include('book_outlet.urls')),
     path('reviews/',include('reviews.urls')),
+    path('profiles/',include('profiles.urls')),
 ]
 
 if settings.DEBUG:

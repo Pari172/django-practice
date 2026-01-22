@@ -8,5 +8,6 @@ urlpatterns = [
     # path("thank-you",views.ThankYouView.as_view()),
     # path("thank-you",views.ReviewsListView.as_view()),
     path("thank-you",views.ReviewListView.as_view()),
-    path("<int:id>",views.SingleReviewView.as_view())
+    path("favorite",views.AddFevoriteView.as_view()),
+    path("<int:id>",views.SingleReviewView.as_view()),
 ]

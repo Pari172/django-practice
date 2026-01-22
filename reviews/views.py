@@ -125,5 +125,13 @@ class SingleReviewView(TemplateView):
         review_id = kwargs["id"]
         review = Review.objects.get(pk=review_id)
         context["review"] = review
+        favorite_id = self.request.session.get("favorite_review")
+        context["is_favorite"] = favorite_id==str(review_id)
         return context
     
+class AddFevoriteView(View):
+    def post(self, request):
+        review_id = request.POST['review_id']
+        fev_review = Review.objects.get(pk=review_id)
+        request.session["favorite_review"]=review_id
+        return HttpResponseRedirect("/reviews/"+review_id)
