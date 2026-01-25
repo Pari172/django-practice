@@ -8,5 +8,6 @@ urlpatterns = [
     # path('all_posts/',views.all_posts, name="all_posts"),
     path('all_posts/',views.AllPostsView.as_view(), name="all_posts"),
     # path('<slug:slug>/',views.view_post, name='view_post'),
+    path('read-later/',views.ReadLaterView.as_view(), name='read-later'),
     path('<slug:slug>/',views.PostDetailView.as_view(), name='view_post'),
 ]

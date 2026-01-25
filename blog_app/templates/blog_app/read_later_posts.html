@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Read Later Posts
+{% endblock title %}
+
+{% block content %}
+    <section>
+        <ul>
+            {% if has_posts %}
+                {% for post in posts %}
+                <li>
+                    <a href="{% url "blog_app:view_post" post.slug%}">{{ post.title }}</a>
+                </li>
+                {% endfor %}
+            {% else %} 
+                <h1>No read later posts yet!</h1>
+            {% endif %}
+        </ul>
+    </section>
+{% endblock content %}

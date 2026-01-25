@@ -5,6 +5,26 @@
 {% endblock title %}
 
 {% block content %}
+    {% if comment_form.errors %}
+        <div>
+            <h2>Saving the comment failed</h2>
+            <p>Please check and fix the comment</p>
+            <a href="#comment-form">Fix</a>
+        </div>
+    {% endif %}
+    {% if is_read_later %}
+        <form method="POST" action="{% url 'blog_app:read-later' %}">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{ post.id }}">
+            <button type="submit" name="remove">Remove from Read Later ❌</button>
+        </form>
+    {% else %}
+        <form method="POST" action="{% url 'blog_app:read-later' %}">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{ post.id }}">
+            <button type="submit">Add to Read Later ✅</button>
+        </form>
+    {% endif %}
     <h1>Post: {{ post.title }}</h1>
     <h4>Exerpt: {{ post.excerpt }}</h4>
     <h4>Author: {{ post.author }}</h4>
@@ -16,4 +36,27 @@
     <br>
     <h4>Date: {{ post.date }}</h4>
     <a href="{% url 'blog_app:all_posts' %}">go to all post</a>
+    
+    <section id="comments">
+        <ul>
+            {% for comment in comments %}
+                <li>
+                    <h2>{{ comment.user_name }}</h2>
+                    <h2>{{ comment.text|linebreaks }}</h2>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="comment-form">
+        <div>
+            <form action="{% url "blog_app:view_post" post.slug %}" method="POST">
+                {% csrf_token %}
+                {{ comment_form }}
+                <button>Save Comment</button>
+            </form>
+        </div>
+    </section>
+    
 {% endblock content %}
+

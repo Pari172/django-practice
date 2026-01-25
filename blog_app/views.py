@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse,HttpResponseRedirect
+from django.urls import reverse
+from django.shortcuts import get_object_or_404,redirect
 from .models import Post
 from django import views
-from .forms import PostForm
 from django.views.generic import ListView,DetailView
+from django.views import View
+from .forms import CommentForm
 # Create your views here.
 # posts = {
 #     "The Future of Remote Work": "As we move further into 2025, hybrid models are evolving into 'fluid workspaces' where location is secondary to synchronous output.",
@@ -56,13 +58,83 @@ class AllPostsView(ListView):
 #         # "body":posts[post]
 #     })
 
-class PostDetailView(DetailView):
-    template_name = "blog_app/view_post.html"
-    model = Post
-    context_object_name = "post"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["tags"] = self.object.tags.all()
-        return context
+# as we need to handle post request comming from comment form DetailView will not work we are commenting it out
+# class PostDetailView(DetailView):
+#     template_name = "blog_app/view_post.html"
+#     model = Post
+#     context_object_name = "post"
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["tags"] = self.object.tags.all()
+#         context["comment_form"] = CommentForm()
+#         return context
     
+class PostDetailView(View):
+    def get(self,request,slug):
+        post = Post.objects.get(slug=slug)
+        stored_posts = request.session.get("stored_posts",[])
+        is_read_later=post.id in stored_posts
+        context = {
+            "post":post,
+            "tags":post.tags.all(),
+            "comment_form":CommentForm(),
+            "comments":post.comments.all().order_by("-id"),
+            "is_read_later":is_read_later
+        }
+        return render(
+            request,
+            "blog_app/view_post.html",
+            context
+        )
+
+    # we are already getting slug while passing through form in action tag
+    def post(self, request, slug):
+        comment_form = CommentForm(request.POST)
+        post = Post.objects.get(slug=slug)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return HttpResponseRedirect(reverse("blog_app:view_post", args=[slug]))
+        stored_posts = request.session.get("stored_posts",[])
+        is_read_later = post.id in stored_posts
+        context = {
+            "post":post,
+            "tags":post.tags.all(),
+            "comment_form":comment_form,
+            "comments":post.comments.all().order_by("-id"),
+            "is_read_later":is_read_later
+        }
+
+        return render(request,"blog_app/view_post.html",context)
+
+class ReadLaterView(View):
+    def get(self,request):
+        stored_posts = request.session.get("stored_posts")
+        context = {}
+        if stored_posts is None or len(stored_posts)==0:
+            context["posts"] = []
+            context["has_posts"] = False
+        else:
+            posts = Post.objects.filter(id__in=stored_posts)
+            context["posts"] = posts
+            context["has_posts"] = True
+        return render(request,"blog_app/read_later_posts.html",context)
+
+    def post(self,request):
+        stored_posts = request.session.get("stored_posts",[])
+        # if stored_posts is None:    we can just add [] in above line
+        #     stored_posts=[]
+        post_id = int(request.POST["post_id"])
+        if "remove" in request.POST:
+            if post_id in stored_posts:
+                stored_posts.remove(post_id)
+        else: 
+            if post_id not in stored_posts:
+                stored_posts.append(int(request.POST["post_id"]))
+            
+        request.session["stored_posts"] = stored_posts
+        post = Post.objects.get(id=post_id)
+        return redirect("blog_app:view_post",slug=post.slug)

@@ -10,6 +10,8 @@
 </head>
 <body>
     <h1>Month wise challenge list</h1>
+    <a href="{% url "blog_app:read-later" %}">Read Later Posts</a>
+    <a href="{% url "blog_app:all_posts" %}">See All Posts</a>
     {% block content %}{% endblock content %}
 </body>
 </html>
