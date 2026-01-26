@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-import os
+from os import getenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,9 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jt*0b!&fq%2n+$_-!3^2b+cfwg_3+&-2ia1_v01@8+82^6d=s1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = False
 
-ALLOWED_HOSTS = []
+#you can use getenv to set DEBUG
+#In production like AWS set IS_DEVELOPMENT to False
+DEBUG = getenv("IS_DEVELOPMENT", "True").lower() in ("true", "1") #second parameter is passed if first is dont know
+
+
+# when we deploy our application on AWS,
+# we need to upload zip file and after its available with hosting link 
+# we need to manually add that link in ALLOWED_HOSTS on AWS
+# but here as development phase we need to add default localhost to run our application locally
+ALLOWED_HOSTS = [
+    getenv("APP_HOST",'127.0.0.1')
+]
 
 
 # Application definition
@@ -44,6 +55,7 @@ INSTALLED_APPS = [
     'book_outlet',
     'reviews',
     'profiles',
+    'storage'
 ]
 
 MIDDLEWARE = [
@@ -123,7 +135,8 @@ USE_TZ = True
 
 
 # bellow line is for django to look static folders inside the apps
-STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR/'staticfiles'
+STATIC_URL = '/static/'
 
 #bellow line is for django to look static folder at global level
 STATICFILES_DIRS = [BASE_DIR/'static']
@@ -131,3 +144,15 @@ STATICFILES_DIRS = [BASE_DIR/'static']
 
 MEDIA_ROOT = BASE_DIR/'media'
 MEDIA_URL = '/media/'
+
+#These settings we are doing to save our static files on 
+# completely different server like S3 bucket to increase performance efficiency
+AWS_STORAGE_BUCKET_NAME = "django-blob-course"
+AWS_S3_REGION_NAME = "us-east-1"
+AWS_ACCESS_KEY_ID = "FOAIJFASDF"
+AWS_SECRET_ACCESS_ID = "HFHIFASDF;ADFASDF"
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+STATICFILES_FOLDER = "static"
+MEDIAFILES_FOLDER = "media"
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
